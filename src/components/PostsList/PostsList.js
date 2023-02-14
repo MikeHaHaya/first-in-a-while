@@ -2,9 +2,23 @@ import Post from "../Post/Post";
 import classes from "./PostsList.module.css";
 import NewPost from "../NewPost/NewPost";
 import Modal from "../Modal/Modal";
+import {useState} from "react";
 
 function PostsList({isPosting, onStopPosting}) {
 
+    const [posts, setPosts] = useState([]);
+    const [id, countId] = useState(-1);
+
+    function addPostHandler(postData) {
+        setPosts(existingPosts => [postData, ...existingPosts]);
+    }
+
+    // TODO -- Learn how to pass an ID properly
+    function countIdHandler() {
+        countId(id + 1);
+        console.log(id);
+        return id;
+    }
 
     let modelContent;
     if (isPosting) {
@@ -12,6 +26,7 @@ function PostsList({isPosting, onStopPosting}) {
             <Modal onClose={onStopPosting}>
                 <NewPost
                     onCancel={onStopPosting}
+                    onAddPost={addPostHandler}
                 />
             </Modal>
         );
@@ -21,10 +36,15 @@ function PostsList({isPosting, onStopPosting}) {
         <>
             {modelContent}
             <ul className={classes.posts}>
-                <Post author="Freddy" body="1, 2, Freddy's coming for you..."/>
-                <Post author="Darth Vader" body="I banged your mom Luke"/>
-                <Post author="Luke" body="Noooooooo"/>
+                {posts.map(post => <Post key={countIdHandler} author={post.author} body={post.body}/>)}
             </ul>
+
+            {posts.length === 0 &&
+                <div style={{textAlign: 'center', color: 'white'}}>
+                    <h2>There are no posts yet.</h2>
+                    <p>Start adding some!</p>
+                </div>
+            }
         </>
     );
 }
