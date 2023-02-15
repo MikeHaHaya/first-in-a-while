@@ -8,7 +8,7 @@ function PostsList({isPosting, onStopPosting}) {
 
     const [posts, setPosts] = useState([]);
     const [isFetching, setIsFetching] = useState(false);
-    const [id, setId] = useState(0);
+    // const [id, setId] = useState(0);
 
     /** How to go get data without React being overloaded.
      * this will make React load it just one time when the Component is launched. */
@@ -36,9 +36,9 @@ function PostsList({isPosting, onStopPosting}) {
     }
 
     // TODO -- Learn how to pass an ID properly
-    function setIdHandler() {
-        setId(prevId => prevId + 1);
-    }
+    // function setIdHandler() {
+    //     setId(prevId => prevId + 1);
+    // }
 
     let modelContent;
     if (isPosting) {
@@ -52,12 +52,13 @@ function PostsList({isPosting, onStopPosting}) {
         );
     }
 
+    // What to show if the app is not in a fetching action with the DB
     if (!isFetching) {
         return (
             <>
                 {modelContent}
                 <ul className={classes.posts}>
-                    {posts.map(post => <Post key={setIdHandler} author={post.author} body={post.body}/>)}
+                    {posts.map(post => <Post key={post.body} author={post.author} body={post.body}/>)}
                 </ul>
 
                 {posts.length === 0 &&
@@ -68,10 +69,11 @@ function PostsList({isPosting, onStopPosting}) {
                 }
             </>
         );
+        // What to show if the app is not in a fetching action with the DB
     } else {
         return (
             <div style={{textAlign: 'center', color: 'white'}}>
-            <p>Loading posts...</p>
+                <p>Loading posts...</p>
             </div>
         )
     }
