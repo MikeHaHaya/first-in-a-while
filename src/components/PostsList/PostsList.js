@@ -2,12 +2,23 @@ import Post from "../Post/Post";
 import classes from "./PostsList.module.css";
 import NewPost from "../NewPost/NewPost";
 import Modal from "../Modal/Modal";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 function PostsList({isPosting, onStopPosting}) {
 
     const [posts, setPosts] = useState([]);
-    const [id, countId] = useState(-1);
+    const [id, setId] = useState(0);
+
+    useEffect(() => {
+        async function fetchPosts() {
+            const response = await fetch("http://localhost:8080/posts")
+            const resData = await response.json();
+            setPosts(resData.posts);
+        }
+
+        fetchPosts();
+    }, [])
+
 
     function addPostHandler(postData) {
         fetch("http://localhost:8080/posts", {
@@ -21,8 +32,8 @@ function PostsList({isPosting, onStopPosting}) {
     }
 
     // TODO -- Learn how to pass an ID properly
-    function countIdHandler() {
-        countId(id + 1);
+    function setIdHandler() {
+        setId(id + 1);
         console.log(id);
         return id;
     }
@@ -43,7 +54,7 @@ function PostsList({isPosting, onStopPosting}) {
         <>
             {modelContent}
             <ul className={classes.posts}>
-                {posts.map(post => <Post key={countIdHandler} author={post.author} body={post.body}/>)}
+                {posts.map(post => <Post key={setIdHandler} author={post.author} body={post.body}/>)}
             </ul>
 
             {posts.length === 0 &&
