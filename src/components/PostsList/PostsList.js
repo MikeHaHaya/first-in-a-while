@@ -1,7 +1,5 @@
 import Post from "../Post/Post";
 import classes from "./PostsList.module.css";
-import NewPost from "../NewPost/NewPost";
-import Modal from "../Modal/Modal";
 import {useState, useEffect} from "react";
 
 function PostsList({isPosting, onStopPosting}) {
@@ -40,23 +38,10 @@ function PostsList({isPosting, onStopPosting}) {
     //     setId(prevId => prevId + 1);
     // }
 
-    let modelContent;
-    if (isPosting) {
-        modelContent = (
-            <Modal onClose={onStopPosting}>
-                <NewPost
-                    onCancel={onStopPosting}
-                    onAddPost={addPostHandler}
-                />
-            </Modal>
-        );
-    }
-
     // What to show if the app is not in a fetching action with the DB
     if (!isFetching) {
         return (
             <>
-                {modelContent}
                 <ul className={classes.posts}>
                     {posts.map(post => <Post key={post.body} author={post.author} body={post.body}/>)}
                 </ul>
